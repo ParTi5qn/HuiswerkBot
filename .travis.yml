@@ -1,7 +1,7 @@
 language: csharp
 mono: none
 dist: xenial
-solution: src\HuiswerkBot.csproj
+# solution: src\HuiswerkBot.csproj
 dotnet: 2.2.101
 install:
   - dotnet restore
