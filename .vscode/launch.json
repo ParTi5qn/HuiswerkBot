@@ -10,7 +10,7 @@
             "request": "launch",
 
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}\\src\\bin\\Debug\\netcoreapp2.1.22\\HuisWerkBot.dll",
+            "program": "${workspaceFolder}\\src\\output\\HuiswerkBot.dll",
             "args": ["target-fram"],
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",

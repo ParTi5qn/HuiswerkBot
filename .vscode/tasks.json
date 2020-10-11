@@ -9,7 +9,9 @@
             "type": "shell",
             "args": [
                 "build",
-                "${cwd}\\src\\HuisWerkBot.csproj",
+                "${cwd}\\src\\HuiswerkBot.csproj",
+                "--output",
+                "${cwd}\\src\\output\\",
                 // Ask dotnet build to generate full paths for file names.
                 "/property:GenerateFullPaths=true",
                 // Do not generate summary otherwise it leads to duplicate errors in Problems panel
