@@ -1,4 +1,4 @@
-﻿# HuiswerkBot
+﻿# HuiswerkBot [![Build Status](https://travis-ci.com/ParTi5qn/HuiswerkBot.svg?branch=master)](https://travis-ci.com/ParTi5qn/HuiswerkBot)
  ####   This is a Discord bot written in C# .NET Core 2.0 with [Discord.Net](https://discord.foxbot.me/stable/).
 
 
