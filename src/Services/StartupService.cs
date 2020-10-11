@@ -8,7 +8,7 @@ using Discord.Commands;
 using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
 
-namespace HuisWerkBot.Services
+namespace HuiswerkBot.Services
 {
     public class StartupService
     {

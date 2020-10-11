@@ -6,7 +6,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 
-namespace HuisWerkBot.Services
+namespace HuiswerkBot.Services
 {
     public class LoggingService
     {

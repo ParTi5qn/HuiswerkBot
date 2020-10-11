@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using HuisWerkBot.Services;
+using HuiswerkBot.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,7 +15,7 @@ public class Startup
    {
        IConfigurationBuilder builder = new ConfigurationBuilder()
         .SetBasePath(AppContext.BaseDirectory)
-        .AddJsonFile("C:\\Dev\\HuisWerkBot\\src\\_config.json");
+        .AddJsonFile("C:\\Dev\\HuiswerkBot\\src\\_config.json");
 
         Configuration= builder.Build();
    }

@@ -6,10 +6,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Discord;
 using Discord.WebSocket;
 using Discord.Commands;
-using HuisWerkBot.Services;
+using HuiswerkBot.Services;
 using System.Reflection;
 
-namespace HuisWerkBot
+namespace HuiswerkBot
 {
     public class MainHuisWerk
     {

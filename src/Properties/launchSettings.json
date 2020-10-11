@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "HuisWerkBot": {
+    "HuiswerkBot": {
       "commandName": "Project",
       "sqlDebugging": false,
       "nativeDebugging": false

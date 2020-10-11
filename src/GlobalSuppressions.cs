@@ -5,4 +5,4 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>", Scope = "member", Target = "~M:HuisWerkBot.Services.CommandHandlerService.HandleCommandAsync(Discord.WebSocket.SocketMessage)~System.Threading.Tasks.Task")]
+[assembly: SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>", Scope = "member", Target = "~M:HuiswerkBot.Services.CommandHandlerService.HandleCommandAsync(Discord.WebSocket.SocketMessage)~System.Threading.Tasks.Task")]

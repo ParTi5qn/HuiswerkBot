@@ -2,11 +2,11 @@ using System.Threading.Tasks;
 using Discord.Commands;
 using MySql.Data;
 using MySql.Data.MySqlClient;
-using HuisWerkBot.Services;
+using HuiswerkBot.Services;
 using System;
 using Discord;
 
-namespace HuisWerkBot.Modules
+namespace HuiswerkBot.Modules
 {
     [Group("hw")]
     public class HuisWerkModule : ModuleBase<SocketCommandContext>

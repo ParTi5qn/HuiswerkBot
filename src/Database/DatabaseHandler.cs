@@ -6,7 +6,7 @@ using Discord.WebSocket;
 using Microsoft.Extensions.Configuration;
 using MySql.Data.MySqlClient;
 
-namespace HuisWerkBot.Database
+namespace HuiswerkBot.Database
 {
     public class DatabaseHandler
     {

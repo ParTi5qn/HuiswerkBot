@@ -6,11 +6,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using HuisWerkBot.Database;
+using HuiswerkBot.Database;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 
-namespace HuisWerkBot.Services
+namespace HuiswerkBot.Services
 {
     public class HuisWerkDatabaseService
     {

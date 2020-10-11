@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using HuisWerkBot.Services;
+using HuiswerkBot.Services;
 
-namespace HuisWerkBot.Modules
+namespace HuiswerkBot.Modules
 {
     /// <summary>
     /// All commands without a prefix

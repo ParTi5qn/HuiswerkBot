@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace HuisWerkBot.Services
+namespace HuiswerkBot.Services
 {
     public class StatusService
     {
