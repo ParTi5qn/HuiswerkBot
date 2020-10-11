@@ -7,9 +7,5 @@ install:
   - dotnet restore
 script:
   - dotnet build
-os:
- - windows
-arch:
- - amd64
 
  
