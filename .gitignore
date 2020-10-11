@@ -1,0 +1,11 @@
+**/obj
+_config.json
+random code.txt
+**/win10-x64/publish
+**/.vs
+**/bin/Debug/*
+**/bin/Release/*
+App.config
+HwBot.sln
+.vs
+data_dictionary_huiswerkbot.txt

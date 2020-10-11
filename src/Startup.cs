@@ -1,0 +1,57 @@
+using System;
+using System.Threading.Tasks;
+using Discord;
+using Discord.Commands;
+using Discord.WebSocket;
+using HuisWerkBot.Services;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+public class Startup
+{
+    IConfigurationRoot Configuration { get; }
+
+   public Startup(string[] args)
+   {
+       IConfigurationBuilder builder = new ConfigurationBuilder()
+        .SetBasePath(AppContext.BaseDirectory)
+        .AddJsonFile("C:\\Dev\\HuisWerkBot\\src\\_config.json");
+
+        Configuration= builder.Build();
+   }
+
+    public static async Task RunAsync(string[] args)
+    {
+        Startup startup = new Startup(args);
+        await startup.RunAsync();
+    }
+
+    public async Task RunAsync()
+    {
+        ServiceCollection services = new ServiceCollection();
+        ConfigureServices(services);
+
+        ServiceProvider provider = services.BuildServiceProvider();
+        provider.GetRequiredService<StatusService>();
+        provider.GetRequiredService<LoggingService>();
+        provider.GetRequiredService<CommandHandlerService>();
+        provider.GetRequiredService<MessageHandlerService>();
+
+        await provider.GetRequiredService<StartupService>().StartAsync();
+        await Task.Delay(-1);
+    }
+
+    private void ConfigureServices(IServiceCollection services)
+    {
+        services
+        .AddSingleton<StatusService>()
+        .AddSingleton<DiscordSocketClient>()
+        .AddSingleton<CommandService>()
+        .AddScoped<CommandHandlerService>()
+        .AddSingleton<StartupService>()
+        .AddSingleton<LoggingService>()
+        .AddSingleton<MessageHandlerService>()
+        .AddSingleton<Random>()
+        .AddSingleton(Configuration);
+    }
+}
