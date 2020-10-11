@@ -5,6 +5,7 @@ random code.txt
 **/.vs
 **/bin/Debug/*
 **/bin/Release/*
+**/output/*
 App.config
 HwBot.sln
 .vs
