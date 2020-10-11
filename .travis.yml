@@ -1,1 +1,10 @@
 language: csharp
+mono: none
+dotnet: 3.1
+script:
+ - dotnet restore
+ os:
+  - windows
+  - linux
+  arch:
+    - amd64

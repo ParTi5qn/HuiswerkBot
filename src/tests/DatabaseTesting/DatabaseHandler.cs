@@ -104,16 +104,33 @@ namespace DatabaseTesting
             }
         }
 
-        public async Task Read(string Table)
+        public async Task Select(string Table)
         {
-            MySqlCommand command = new MySqlCommand
+            try
             {
-                Connection = connection,
-                CommandText = 
-                    "SELECT * from huiswerk WHERE finisihed = 0"
-            };
+                MySqlCommand command = new MySqlCommand
+                {
+                    Connection = connection,
+                    CommandText =
+                        $"SELECT * from {Table} WHERE finished = 0"
+                };
 
 
+                // command.Parameters.AddWithValue("@table", Table);
+
+                await command.PrepareAsync();
+                MySqlDataReader reader = command.ExecuteReader();
+                while (await reader.ReadAsync())
+                {
+                    Debug.WriteLine(reader["description"]);
+                }
+
+                reader.Close();
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.Message);
+            }
         }
     }
 }
