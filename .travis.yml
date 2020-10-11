@@ -4,7 +4,7 @@ dist: xenial
 # solution: src\HuiswerkBot.csproj
 dotnet: 3.1.402
 install:
-  - dotnet restore
+  - dotnet restore -v diag
 script:
   - dotnet build
 
