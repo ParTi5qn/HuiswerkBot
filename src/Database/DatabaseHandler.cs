@@ -20,37 +20,33 @@ namespace HuiswerkBot.Database
             get => (_connection.State == ConnectionState.Open);
         }
 
+        // public DatabaseHandler()
+        // {
+        //     try
+        //     {
+        //         _connection = new MySqlConnection(config["dbConfig:connectionString"]);
+        //         _connection.StateChange += Connection_StateChange;
+        //         _connection.InfoMessage += Connection_InfoMessage;
+        //         _connection.Open();
+        //         if (_connection.State == ConnectionState.Open)
+        //         {
+        //             Console.WriteLine($"Succesfully connected to {_connection.Database}!");
+        //         }
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         Console.WriteLine(e.Message);
+        //     }
+        // }
+
         public DatabaseHandler(IConfigurationRoot config)
         {
-            if (config != null) OpenConnectionAsync(this._connection, config["dbConfig:connectionString"]);
-        }
-
-
-        internal void Connection_InfoMessage(object sender, MySqlInfoMessageEventArgs args)
-        {
-            int i = 0;
-            while (i < args.errors.Length)
-            {
-                Console.WriteLine($"InfoMessage: {args.errors[i]}");
-                i++;
-            }
-        }
-
-        internal void Connection_StateChange(object sender, StateChangeEventArgs e)
-        {
-            Console.WriteLine($"Connection state changed to: {e.CurrentState}");
-        }
-
-
-        internal async Task OpenConnectionAsync(MySqlConnection _connection, string con)
-        {
-            _connection = new MySqlConnection(con);
-
             try
             {
-                await _connection.OpenAsync();
-                _connection.StateChange += this.Connection_StateChange;
-                _connection.InfoMessage += this.Connection_InfoMessage;
+                _connection = new MySqlConnection(config["dbConfig:connectionString"]);
+                _connection.Open();
+                _connection.StateChange += Connection_StateChange;
+                _connection.InfoMessage += Connection_InfoMessage;
 
                 if (_connection.State == ConnectionState.Open)
                 {
@@ -61,6 +57,26 @@ namespace HuiswerkBot.Database
             {
                 Console.WriteLine(e.Message);
             }
+        }
+
+        public static async Task OpenConnection(MySqlConnection _connection, string _connectionString, IConfigurationRoot config)
+        {
+           
+        }
+
+        private static void Connection_InfoMessage(object sender, MySqlInfoMessageEventArgs args)
+        {
+            int i = 0;
+            while (i < args.errors.Length)
+            {
+                Console.WriteLine($"InfoMessage: {args.errors[i]}");
+                i++;
+            }
+        }
+
+        private static void Connection_StateChange(object sender, StateChangeEventArgs e)
+        {
+            Console.WriteLine($"Connection state changed to: {e.CurrentState}");
         }
 
         internal async Task OpenAsync()
