@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using HuisWerkBot.TypeReaders;
 using Microsoft.Extensions.Configuration;
 
 namespace HuiswerkBot.Services
@@ -39,6 +40,7 @@ namespace HuiswerkBot.Services
                 return Task.CompletedTask;
             };
 
+            //_commands.AddTypeReader(typeof(string), new StringTypeReader());
             await _commands.AddModulesAsync(Assembly.GetEntryAssembly(), _provider);
         }
     }

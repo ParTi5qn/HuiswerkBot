@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using System.Diagnostics;
 
 namespace HuiswerkBot.Services
 {
@@ -62,12 +63,16 @@ namespace HuiswerkBot.Services
             if(!(message.HasCharPrefix('!', ref argPos)) || message.HasMentionPrefix(_client.CurrentUser, ref argPos) || message.Author.IsBot) return;
 
             var context = new SocketCommandContext(_client, message);
+            
 
-            var result = await _commands.ExecuteAsync(
+            IResult result = await _commands.ExecuteAsync(
                     context: context,
                     argPos: argPos,
                     services: _services
             );
+
+            if (result.IsSuccess) Debug.WriteLine($"{messageParam.Content} executed succesfully");
+
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -9,10 +10,11 @@ using Discord.WebSocket;
 using HuiswerkBot.Database;
 using MySql.Data;
 using MySql.Data.MySqlClient;
+using HuiswerkBot.Modules;
 
 namespace HuiswerkBot.Services
 {
-    public class HuisWerkDatabaseService
+    public class HuiswerkDatabaseService
     {
         private readonly CommandService _commands;
         private readonly DiscordSocketClient _client;
@@ -21,7 +23,7 @@ namespace HuiswerkBot.Services
 
         private static DatabaseHandler _dbHandler;
 
-        public HuisWerkDatabaseService(IServiceProvider services)
+        public HuiswerkDatabaseService(IServiceProvider services)
         {
             _client = services.GetRequiredService<DiscordSocketClient>();
             _commands = services.GetRequiredService<CommandService>();
@@ -31,25 +33,37 @@ namespace HuiswerkBot.Services
             _dbHandler = new DatabaseHandler(_config); 
         }
 
-        public static async Task CreateConnection()
+        internal static async Task CreateConnection()
         {
-            if(_dbHandler.isConnected)
+            if(_dbHandler.Connected)
             {
                 Console.WriteLine("Connection already established");
                 return;
             }
-            await _dbHandler.Connect();
+            await _dbHandler.OpenAsync();
             Console.WriteLine("CreateConnection executed");
         }
 
-        public static async Task Insert(string Huiswerk, string Username)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subject"></param>
+        /// <param name="description"></param>
+        /// <param name="deadline"></param>
+        /// <param name="finised_date"></param>
+        /// <param name="author"></param>
+        /// <param name="author_group"></param>
+        /// <param name="finised"></param>
+        /// <returns></returns>
+        internal static async Task Insert(string subject, string description, DateTime deadline, DateTime finised_date, string author, string author_group = "", string author_avatar = "", bool finised = false)
         {
-            await _dbHandler.InsertHuiswerk(Huiswerk, Username);
+            if (deadline == null) deadline = DateTime.Now;
+            await _dbHandler.Insert(subject, description, deadline, finised_date, author,  author_group, author_avatar, finised);
         }
         
-        public static async Task<EmbedBuilder> Read()
+        internal static async Task<HuiswerkList> Read(int amount = 5)
         {
-            return await _dbHandler.GetHuiswerk();
+            return await _dbHandler.Read(amount);
         }
     }
 }

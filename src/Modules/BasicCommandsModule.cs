@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Threading.Tasks;
 using Discord;
@@ -21,7 +22,15 @@ namespace HuiswerkBot.Modules
         {
             _service = service;
         }
-        
+
+
+        [Command("echo")]
+        [Summary("Says exactly what you say")]
+        public async Task Echo([Remainder]string input)
+        {
+            await Context.Channel.SendMessageAsync(input);
+        }
+
         [Command("help")]
         [Summary("Display help")]
         public async Task Help()
@@ -66,9 +75,10 @@ namespace HuiswerkBot.Modules
         {
             DateTime runtime = await StatusService.GetRuntime();
             string uptime = await StatusService.GetUpTime(runtime);
-            string reply = $"```Bot uptime is: {uptime}.```";
+            string reply = $"```Bot uptime is: {uptime}```";
             
             await Context.Channel.SendMessageAsync(reply);
         }
+
     }
 }

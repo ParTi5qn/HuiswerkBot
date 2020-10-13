@@ -25,6 +25,7 @@ namespace HuiswerkBot.Services
         {
             await InstallLoggingServiceAsync();
         }
+
         public async Task InstallLoggingServiceAsync(Func<LogMessage, Task> handler = null)
         {
             await Task.Run( () => _client.Log += LoggingAsync);

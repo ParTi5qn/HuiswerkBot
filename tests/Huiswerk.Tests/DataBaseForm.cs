@@ -21,17 +21,15 @@ namespace DatabaseTesting
             _dbHandler = new DatabaseHandler();
         }
 
-        private async void btn_OpenConnection_Click(object sender, EventArgs e)
+        private async void Btn_OpenConnection_Click(object sender, EventArgs e)
         {
             await _dbHandler.OpenAsync();
             output.Text += "Connection opened \r\n";
         }
 
-        private async void btn_Insert_Click(object sender, EventArgs e)
+        private async void Btn_Insert_Click(object sender, EventArgs e)
         {
-            Hashtable parameters = new Hashtable();
-            parameters.Add("huiswerk_text", "DATABASETESTING");
-            parameters.Add("made_by", "DATABSETESTING");
+            
 
             await _dbHandler.Insert("huiswerk");
             output.Text += "Insertion complete \r\n";

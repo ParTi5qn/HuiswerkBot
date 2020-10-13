@@ -55,8 +55,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Remove="tests\**" />
+    <Compile Remove="NewFolder\**" />
     <Compile Remove="tests\**" />
+    <EmbeddedResource Remove="NewFolder\**" />
     <EmbeddedResource Remove="tests\**" />
+    <None Remove="NewFolder\**" />
     <None Remove="tests\**" />
   </ItemGroup>
 

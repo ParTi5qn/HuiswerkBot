@@ -36,6 +36,8 @@ public class Startup
         provider.GetRequiredService<LoggingService>();
         provider.GetRequiredService<CommandHandlerService>();
         provider.GetRequiredService<MessageHandlerService>();
+        provider.GetRequiredService<HuiswerkDatabaseService>();
+
 
         await provider.GetRequiredService<StartupService>().StartAsync();
         await Task.Delay(-1);
@@ -51,6 +53,7 @@ public class Startup
         .AddSingleton<StartupService>()
         .AddSingleton<LoggingService>()
         .AddSingleton<MessageHandlerService>()
+        .AddSingleton<HuiswerkDatabaseService>()
         .AddSingleton<Random>()
         .AddSingleton(Configuration);
     }

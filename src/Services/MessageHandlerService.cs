@@ -18,21 +18,20 @@ namespace HuiswerkBot.Services
             _client = services.GetRequiredService<DiscordSocketClient>();
             _services = services;
 
-            _client.MessageReceived += MessageRecieved;
             _client.MessageReceived += MessageRecievedAsync;
             Console.WriteLine("MessageHandler started!");
         }
 
-        public async Task MessageRecievedAsync(SocketMessage rawMessage)
+        public async Task MessageRecievedAsync(SocketMessage socketMessage)
         {
-            await Task.Run( () => rawMessage.Content);
+            await Task.Run( () => Console.WriteLine(socketMessage.Content));
         }
 
         private async Task MessageRecieved(SocketMessage socketMessage)
         {
             await Task.Run( () => 
             {
-                Console.WriteLine(socketMessage.ToString());
+                Console.WriteLine(socketMessage.Content);
             });
         }
     }

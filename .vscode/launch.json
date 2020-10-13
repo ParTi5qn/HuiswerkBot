@@ -14,7 +14,7 @@
             "args": ["target-fram"],
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
-            "stopAtEntry": true,
+            "stopAtEntry": false,
             "enableStepFiltering": false,
             "justMyCode": false,
         },

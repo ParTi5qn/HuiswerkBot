@@ -42,7 +42,7 @@
             this.btn_OpenConnection.TabIndex = 0;
             this.btn_OpenConnection.Text = "Open Connection";
             this.btn_OpenConnection.UseVisualStyleBackColor = true;
-            this.btn_OpenConnection.Click += new System.EventHandler(this.btn_OpenConnection_Click);
+            this.btn_OpenConnection.Click += new System.EventHandler(this.Btn_OpenConnection_Click);
             // 
             // btn_Insert
             // 
@@ -52,7 +52,7 @@
             this.btn_Insert.TabIndex = 0;
             this.btn_Insert.Text = "Insert";
             this.btn_Insert.UseVisualStyleBackColor = true;
-            this.btn_Insert.Click += new System.EventHandler(this.btn_Insert_Click);
+            this.btn_Insert.Click += new System.EventHandler(this.Btn_Insert_Click);
             // 
             // btn_Read
             // 
