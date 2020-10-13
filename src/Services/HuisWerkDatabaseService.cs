@@ -23,11 +23,11 @@ namespace HuiswerkBot.Services
 
         private static DatabaseHandler _dbHandler;
 
-        public HuiswerkDatabaseService(IServiceProvider services)
+        public HuiswerkDatabaseService(IServiceProvider services, IConfigurationRoot config)
         {
             _client = services.GetRequiredService<DiscordSocketClient>();
             _commands = services.GetRequiredService<CommandService>();
-            _config = services.GetRequiredService<IConfigurationRoot>();
+            _config = config;
             _services = services;
             
             _dbHandler = new DatabaseHandler(_config); 

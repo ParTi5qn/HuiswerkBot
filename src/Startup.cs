@@ -15,7 +15,7 @@ public class Startup
    {
        IConfigurationBuilder builder = new ConfigurationBuilder()
         .SetBasePath(AppContext.BaseDirectory)
-        .AddJsonFile("C:\\Dev\\HuiswerkBot\\src\\_config.json");
+        .AddJsonFile("_config.json");
 
         Configuration= builder.Build();
    }

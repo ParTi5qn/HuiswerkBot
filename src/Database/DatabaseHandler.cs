@@ -6,56 +6,27 @@ using MySql.Data.MySqlClient;
 using System.Data;
 using System.Diagnostics;
 using HuiswerkBot.Modules;
+using Microsoft.Extensions.Configuration;
 using ConnectionState = System.Data.ConnectionState;
 
 namespace HuiswerkBot.Database
 {
     internal class DatabaseHandler
     {
-        private readonly string _connectionString = "server=192.168.2.63;uid=decodos;password=toor;Database=hw_test;";
         private readonly MySqlConnection _connection;
-        public bool Connected { get => (_connection.State == ConnectionState.Open); }
+        private readonly IConfigurationRoot _config;
 
-        public DatabaseHandler()
-        {
-            try
-            {
-                _connection = new MySqlConnection(_connectionString);
-                _connection.StateChange += this.Connection_StateChange;
-                _connection.InfoMessage += this.Connection_InfoMessage;
-                _connection.Open();
-                if (_connection.State == ConnectionState.Open)
-                {
-                    Console.WriteLine($"Succesfully connected to {_connection.Database}!");
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+        public bool Connected {
+            get => (_connection.State == ConnectionState.Open);
         }
 
-        public DatabaseHandler(object config)
+        public DatabaseHandler(IConfigurationRoot config)
         {
-            Console.WriteLine($"Using non-supported constructor at: {new StackFrame().GetFileName()}: {new StackFrame().GetFileLineNumber()}");
-            try
-            {
-                _connection = new MySqlConnection(_connectionString);
-                _connection.StateChange += this.Connection_StateChange;
-                _connection.InfoMessage += this.Connection_InfoMessage;
-                _connection.Open();
-                if (_connection.State == ConnectionState.Open)
-                {
-                    Console.WriteLine($"Succesfully connected to {_connection.Database}!");
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            if (config != null) OpenConnectionAsync(this._connection, config["dbConfig:connectionString"]);
         }
 
-        private void Connection_InfoMessage(object sender, MySqlInfoMessageEventArgs args)
+
+        internal void Connection_InfoMessage(object sender, MySqlInfoMessageEventArgs args)
         {
             int i = 0;
             while (i < args.errors.Length)
@@ -65,9 +36,31 @@ namespace HuiswerkBot.Database
             }
         }
 
-        private void Connection_StateChange(object sender, StateChangeEventArgs e)
+        internal void Connection_StateChange(object sender, StateChangeEventArgs e)
         {
             Console.WriteLine($"Connection state changed to: {e.CurrentState}");
+        }
+
+
+        internal async Task OpenConnectionAsync(MySqlConnection _connection, string con)
+        {
+            _connection = new MySqlConnection(con);
+
+            try
+            {
+                await _connection.OpenAsync();
+                _connection.StateChange += this.Connection_StateChange;
+                _connection.InfoMessage += this.Connection_InfoMessage;
+
+                if (_connection.State == ConnectionState.Open)
+                {
+                    Console.WriteLine($"Succesfully connected to {_connection.Database}!");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
 
         internal async Task OpenAsync()
@@ -82,8 +75,6 @@ namespace HuiswerkBot.Database
                 Console.WriteLine(e.Message);
             }
         }
-
-
 
         /// <summary>
         /// Perform INSERT of Huiswerk into the database

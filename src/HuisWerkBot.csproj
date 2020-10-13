@@ -15,16 +15,15 @@
     <NeutralLanguage>English</NeutralLanguage>
     <RepositoryUrl>https://github.com/ParTi5qn/HuiswerkBot</RepositoryUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Platforms>x86;x64</Platforms>
+    <Platforms>AnyCPUx86;x64</Platforms>
     <Product />
-    <FileVersion>0.0.1.1</FileVersion>
-    <AssemblyVersion>0.0.1.1</AssemblyVersion>
+    <FileVersion>0.1.0.0</FileVersion>
+    <AssemblyVersion>0.1.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <!-- Release configuration-->
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutputPath>C:\Dev\HuiswerkBot\src\output\$(Configuration)-$(Platform)</OutputPath>
-    <IntermediateOutputPath>C:\Dev\HuiswerkBot\src\output\$(Configuration)-$(Platform)\obj\</IntermediateOutputPath>
+    <IntermediateOutputPath>$(SolutionDir)src\output\obj\</IntermediateOutputPath>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <PlatformTarget>x64</PlatformTarget>
     <WarningLevel>0</WarningLevel>
@@ -32,8 +31,8 @@
 
   <!-- Debug configuration-->
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutputPath>C:\Dev\HuiswerkBot\src\output\$(Configuration)-$(Platform)</OutputPath>
-    <IntermediateOutputPath>C:\Dev\HuiswerkBot\src\output\$(Configuration)-$(Platform)\obj\</IntermediateOutputPath>
+    <OutputPath>$(SolutionDir)$(Configuration)-$(Platform)</OutputPath>
+    <IntermediateOutputPath>$(SolutionDir)src\output\obj\</IntermediateOutputPath>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <PlatformTarget>x64</PlatformTarget>
     <NoWarn>1701;1702;</NoWarn>
@@ -51,15 +50,18 @@
 
 
   <ItemGroup>
-    <None Update="_config.yml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <None Update="_config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Remove="tests\**" />
     <Compile Remove="NewFolder\**" />
+    <Compile Remove="output\**" />
     <Compile Remove="tests\**" />
     <EmbeddedResource Remove="NewFolder\**" />
+    <EmbeddedResource Remove="output\**" />
     <EmbeddedResource Remove="tests\**" />
     <None Remove="NewFolder\**" />
+    <None Remove="output\**" />
     <None Remove="tests\**" />
   </ItemGroup>
 
