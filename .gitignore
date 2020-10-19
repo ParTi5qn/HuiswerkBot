@@ -1,12 +1,18 @@
-**/obj
+[Oo]bj/
+[Bb]in/
+.nuget/
+_ReSharper.*
+packages/
+artifacts/
+*.user
+*.suo
+*.userprefs
+*DS_Store
+*.sln.ide
 _config.json
 random code.txt
-**/win10-x64/publish
-**/.vs
-**/bin/Debug/*
-**/bin/Release/*
 **/output/*
 App.config
 HwBot.sln
 .vs
-data_dictionary_huiswerkbot.txt
+docs

@@ -9,20 +9,22 @@
     <BaseOutputPath>$(SolutionDir)output</BaseOutputPath>
     <DocumentationFile></DocumentationFile>
     <StartupObject>HuiswerkBot.MainHuisWerk</StartupObject>
-    <Version>0.0.1.1</Version>
+    <Version>0.1.0.0</Version>
     <Company>ByteCode</Company>
     <Copyright>ByteCode 2020</Copyright>
     <NeutralLanguage>English</NeutralLanguage>
     <RepositoryUrl>https://github.com/ParTi5qn/HuiswerkBot</RepositoryUrl>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Platforms>AnyCPUx86;x64</Platforms>
+    <Platforms>AnyCPUx86;x64;AnyCPU</Platforms>
     <Product />
     <FileVersion>0.1.0.0</FileVersion>
     <AssemblyVersion>0.1.0.0</AssemblyVersion>
+    <Configurations>Debug;Release;Debug offline</Configurations>
   </PropertyGroup>
 
   <!-- Release configuration-->
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutputPath>$(SolutionDir)output\$(Configuration)-$(Platform)</OutputPath>
     <IntermediateOutputPath>$(SolutionDir)src\output\obj\</IntermediateOutputPath>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <PlatformTarget>x64</PlatformTarget>
@@ -31,11 +33,22 @@
 
   <!-- Debug configuration-->
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutputPath>$(SolutionDir)$(Configuration)-$(Platform)</OutputPath>
+    <OutputPath>$(SolutionDir)output\$(Configuration)-$(Platform)</OutputPath>
     <IntermediateOutputPath>$(SolutionDir)src\output\obj\</IntermediateOutputPath>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <PlatformTarget>x64</PlatformTarget>
     <NoWarn>1701;1702;</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug offline|x64'">
+    <OutputPath>$(SolutionDir)output\$(Configuration)-$(Platform)</OutputPath>
+    <IntermediateOutputPath>$(SolutionDir)src\output\obj\</IntermediateOutputPath>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <PlatformTarget>x64</PlatformTarget>
+    <NoWarn>1701;1702;</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug offline|AnyCPU'">
+    <Optimize>false</Optimize>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
 
   <!-- Dependecies -->
@@ -46,6 +59,10 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Xml" Version="3.1.8" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.8" />
     <PackageReference Include="MySql.Data" Version="8.0.21" />
+    <PackageReference Include="Serilog" Version="2.10.0" />
+    <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
   </ItemGroup>
 
 
@@ -54,13 +71,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Remove="tests\**" />
-    <Compile Remove="NewFolder\**" />
     <Compile Remove="output\**" />
     <Compile Remove="tests\**" />
-    <EmbeddedResource Remove="NewFolder\**" />
     <EmbeddedResource Remove="output\**" />
     <EmbeddedResource Remove="tests\**" />
-    <None Remove="NewFolder\**" />
     <None Remove="output\**" />
     <None Remove="tests\**" />
   </ItemGroup>

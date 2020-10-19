@@ -6,51 +6,37 @@ using MySql.Data.MySqlClient;
 using System.Data;
 using System.Diagnostics;
 using HuiswerkBot.Modules;
+using HuiswerkBot.Helpers;
 using Microsoft.Extensions.Configuration;
 using ConnectionState = System.Data.ConnectionState;
+using MySqlX.XDevAPI.Common;
+using Microsoft.Extensions.DependencyInjection;
+using HuiswerkBot.Services;
 
 namespace HuiswerkBot.Database
 {
     internal class DatabaseHandler
     {
         private readonly MySqlConnection _connection;
-        private readonly IConfigurationRoot _config;
+        private readonly IServiceProvider _serivces;
 
-        public bool Connected {
-            get => (_connection.State == ConnectionState.Open);
-        }
+        public bool Connected => (this._connection.State == ConnectionState.Open);
 
-        // public DatabaseHandler()
-        // {
-        //     try
-        //     {
-        //         _connection = new MySqlConnection(config["dbConfig:connectionString"]);
-        //         _connection.StateChange += Connection_StateChange;
-        //         _connection.InfoMessage += Connection_InfoMessage;
-        //         _connection.Open();
-        //         if (_connection.State == ConnectionState.Open)
-        //         {
-        //             Console.WriteLine($"Succesfully connected to {_connection.Database}!");
-        //         }
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         Console.WriteLine(e.Message);
-        //     }
-        // }
-
-        public DatabaseHandler(IConfigurationRoot config)
+        public DatabaseHandler(IServiceProvider services, IConfiguration config)
         {
             try
             {
-                _connection = new MySqlConnection(config["dbConfig:connectionString"]);
-                _connection.Open();
-                _connection.StateChange += Connection_StateChange;
-                _connection.InfoMessage += Connection_InfoMessage;
 
-                if (_connection.State == ConnectionState.Open)
+                this._serivces = services;
+                // ReSharper disable once UseObjectOrCollectionInitializer
+                this._connection = new MySqlConnection();
+                this._connection.ConnectionString = config["dbConfig:connectionString"];
+                this._connection.StateChange += Connection_StateChange;
+                this._connection.InfoMessage += Connection_InfoMessage;
+                Open(this._connection);
+                if (this._connection.State == ConnectionState.Open)
                 {
-                    Console.WriteLine($"Succesfully connected to {_connection.Database}!");
+                    Console.WriteLine($"Successfully connected to {this._connection.Database}!");
                 }
             }
             catch (Exception e)
@@ -59,9 +45,9 @@ namespace HuiswerkBot.Database
             }
         }
 
-        public static async Task OpenConnection(MySqlConnection _connection, string _connectionString, IConfigurationRoot config)
+        private static void Open(MySqlConnection connection)
         {
-           
+            connection.Open();
         }
 
         private static void Connection_InfoMessage(object sender, MySqlInfoMessageEventArgs args)
@@ -83,7 +69,7 @@ namespace HuiswerkBot.Database
         {
             try
             {
-                if (!this.Connected) await _connection.OpenAsync();
+                if (!this.Connected) await this._connection.OpenAsync();
                 else Console.WriteLine("Connection already open!");
             }
             catch (Exception e)
@@ -103,30 +89,35 @@ namespace HuiswerkBot.Database
         /// <param name="authorGroup"></param>
         /// <param name="finised"></param>
         /// <returns></returns>
-        internal async Task Insert(string subject, string description, DateTime deadline, DateTime finisedDate, string author, string authorGroup = "", string authorAvatar = "", bool finised = false)
+        internal async Task Insert(string subject, string description, string deadline, DateTime finisedDate,
+            string author, string authorGroup = "", string authorAvatar = "", bool finised = false)
         {
             try
             {
-                await OpenAsync();
-                if (Connected)
+                await this.OpenAsync();
+                if (this.Connected)
                 {
+
+
                     // Setup the command to execute
                     MySqlCommand command = new MySqlCommand
                     {
-                        Connection = _connection,
+                        Connection = this._connection,
                         CommandText =
-                            $"INSERT INTO `huiswerk`(`subject`, `description`, `deadline`, `author`, `authorGroup`, `authorAvatar` ,`creation_date`, `finished`, `finished_date`) VALUES (?subject, ?description, ?deadline, ?author, ?authorGroup, ?authorAvatar, ?creation_date, ?finished, ?finished_date)"
+                            $"INSERT INTO `huiswerk`(`subject`, `description`, `deadline`, `author`, `author_group`, `author_avatar` ,`creation_date`, `finished`, `finished_date`) VALUES (?subject, ?description, ?deadline, ?author, ?authorGroup, ?authorAvatar, ?creation_date, ?finished, ?finished_date)"
                     };
+
+                    DateTime ffs = DateTimeHelper.FormatDateTime(deadline, "MM/dd/yyyy");
 
                     command.Parameters.AddWithValue("?subject", subject);
                     command.Parameters.AddWithValue("?description", description);
-                    command.Parameters.AddWithValue("deadline", deadline);
+                    command.Parameters.AddWithValue("deadline", ffs);
                     command.Parameters.AddWithValue("?author", author);
                     command.Parameters.AddWithValue("?authorGroup", authorGroup);
                     command.Parameters.AddWithValue("?authorAvatar", authorAvatar);
                     command.Parameters.AddWithValue("?creation_date", DateTime.Now);
                     command.Parameters.AddWithValue("?finished", finised);
-                    command.Parameters.AddWithValue("?finished_date", new DateTime(DateTime.Now.Ticks + new DateTime(2099, 12, 31).Ticks));
+                    command.Parameters.AddWithValue("?finished_date", new DateTime(2099, 12, 31));
 
                     await command.PrepareAsync();
 
@@ -135,7 +126,8 @@ namespace HuiswerkBot.Database
                         // Console.WriteLine($"{command.ExecuteReader().RecordsAffected} rows have been inserted.");
                     }
                 }
-                _connection.Close();
+
+                this._connection.Close();
             }
             catch (Exception e)
             {
@@ -151,9 +143,9 @@ namespace HuiswerkBot.Database
                 await OpenAsync();
                 MySqlCommand command = new MySqlCommand
                 {
-                    Connection = _connection,
+                    Connection = this._connection,
                     CommandText =
-                        $"SELECT * FROM `huiswerk` WHERE deadline > CURDATE() ORDER BY `deadline` ASC LIMIT 0, ?amount"
+                        $"SELECT * FROM `huiswerk` WHERE deadline > CURDATE() AND finished = 0 ORDER BY `deadline` ASC LIMIT 0,  ?amount"
                 };
 
                 // Add value to parameter
@@ -166,17 +158,19 @@ namespace HuiswerkBot.Database
                 int i = 0;
                 while (await reader.ReadAsync())
                 {
-                    Huiswerk huiswerk = new Huiswerk();
-                    huiswerk.ID = reader["hw_id"];
-                    huiswerk.Subject = reader["subject"];
-                    huiswerk.Description = reader["description"];
-                    huiswerk.Deadline = reader["deadline"];
-                    huiswerk.Author = reader["author"];
-                    huiswerk.AuthorGroup = reader["author_group"];
-                    huiswerk.AuthorAvatar = reader["author_avatar"];
-                    huiswerk.CreationDate = reader["creation_date"];
-                    huiswerk.Finished = reader["finished"];
-                    huiswerk.FinishedDate = reader["finished_date"];
+                    Huiswerk huiswerk = new Huiswerk
+                    {
+                        ID = reader["hw_id"],
+                        Subject = reader["subject"],
+                        Description = reader["description"],
+                        Deadline = reader["deadline"],
+                        Author = reader["author"],
+                        AuthorGroup = reader["author_group"],
+                        AuthorAvatar = reader["author_avatar"],
+                        CreationDate = reader["creation_date"],
+                        Finished = reader["finished"],
+                        FinishedDate = reader["finished_date"],
+                    };
                     result[i] = huiswerk;
 
                     Console.WriteLine($"huiswerk: {huiswerk.ID}");
@@ -185,7 +179,7 @@ namespace HuiswerkBot.Database
                 }
 
                 reader.Close();
-                _connection.Close();
+                this._connection.Close();
             }
             catch (Exception e)
             {
@@ -193,6 +187,34 @@ namespace HuiswerkBot.Database
             }
 
             return result;
+        }
+
+        internal async Task Delete(int hwID)
+        {
+            int result;
+            try
+            {
+                await this.OpenAsync();
+                if (this.Connected)
+                {
+                    MySqlCommand command = new MySqlCommand
+                    {
+                        Connection = this._connection,
+                        CommandText =
+                            $"UPDATE huiswerk SET finished = 1 WHERE hw_id = ?hw_id"
+                    };
+
+                    command.Parameters.AddWithValue("?hw_id", hwID);
+                    result = await command.ExecuteNonQueryAsync();
+                    await this._serivces.GetRequiredService<Logging>().Write($"result of deleting: {result}");
+                }
+                
+                this._connection.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
     }
 }

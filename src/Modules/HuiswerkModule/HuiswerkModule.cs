@@ -4,7 +4,8 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using HuiswerkBot.Services;
-using HuisWerkBot.Modules;
+using HuiswerkBot.Modules;
+using Microsoft.Extensions.DependencyInjection;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 
@@ -12,14 +13,16 @@ using MySql.Data.MySqlClient;
 namespace HuiswerkBot.Modules
 {
     [Group("hw")]
-    public class HuisWerkModule : ModuleBase<SocketCommandContext>
+    public class HuiswerkModule : ModuleBase<SocketCommandContext>
     {
-        private readonly CommandService _service;
+        private readonly CommandService _command;
+        private readonly IServiceProvider _services;
         
-
-        public HuisWerkModule(CommandService service)
+        public HuiswerkModule(IServiceProvider services)
         {
-            _service = service;
+            
+            this._command = services.GetRequiredService<CommandService>();
+            this._services = services;
         }
 
         /// <summary>
@@ -28,27 +31,25 @@ namespace HuiswerkBot.Modules
         /// <returns></returns>
         [Command("add")]
         [Summary("Add homework to the database")]
-        public async Task AddHomework(string subject, DateTime deadline, params string[] description)
+        public async Task AddHomework(string subject, string deadline, params string[] description)
         {
-            string _d = "";
-            foreach (string s in description)
-            {
-                _d += s + " ";
-            }
+            // ReSharper disable once InconsistentNaming
+            string _description = "";
+            foreach (string s in description) _description += s + " ";
 
-            Console.WriteLine(_d);
-            await HuiswerkDatabaseService.Insert(subject, _d, deadline, DateTime.Now.AddDays(7), Context.User.Username, author_avatar: Context.User.GetAvatarUrl());
+            // Console.WriteLine(_description);
+            await Services.Database.Insert(subject, _description, deadline, DateTime.Now.AddDays(7), this.Context.User.Username, authorAvatar: this.Context.User.GetAvatarUrl());
         }
 
         /// <summary>
-        /// Retrives homework from 'huiswerk database
+        /// Retrieves homework from 'huiswerk' database
         /// </summary>
         /// <returns></returns>
         [Command("see")]
         [Summary("Retrieves from the huiswerk database")]
         public async Task SeeHomework(int amount = 5)
         {
-            HuiswerkList hw = await HuiswerkDatabaseService.Read();
+            HuiswerkList hw = await Services.Database.Read();
             foreach (Huiswerk huiswerk in hw)
             {
                 EmbedBuilder builder = new EmbedBuilder()
@@ -84,10 +85,8 @@ namespace HuiswerkBot.Modules
                     },
                     Color = new Color(0),
                 };
-
-                await Context.Channel.SendMessageAsync("", false, builder.Build());
+                await this.Context.Channel.SendMessageAsync("", false, builder.Build());
             }
-
         }
     }
 }

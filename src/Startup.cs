@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using HuiswerkBot.Modules;
 using HuiswerkBot.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,29 +33,29 @@ public class Startup
         ConfigureServices(services);
 
         ServiceProvider provider = services.BuildServiceProvider();
-        provider.GetRequiredService<StatusService>();
-        provider.GetRequiredService<LoggingService>();
-        provider.GetRequiredService<CommandHandlerService>();
-        provider.GetRequiredService<MessageHandlerService>();
-        provider.GetRequiredService<HuiswerkDatabaseService>();
+        provider.GetRequiredService<Status>();
+        provider.GetRequiredService<Logging>();
+        provider.GetRequiredService<CommandHandler>();
+        provider.GetRequiredService<MessageHandler>();
+        provider.GetRequiredService<Database>();
 
 
-        await provider.GetRequiredService<StartupService>().StartAsync();
+        await provider.GetRequiredService<HuiswerkBot.Services.Startup>().StartAsync();
         await Task.Delay(-1);
     }
 
     private void ConfigureServices(IServiceCollection services)
     {
         services
-        .AddSingleton<StatusService>()
         .AddSingleton<DiscordSocketClient>()
         .AddSingleton<CommandService>()
-        .AddScoped<CommandHandlerService>()
-        .AddSingleton<StartupService>()
-        .AddSingleton<LoggingService>()
-        .AddSingleton<MessageHandlerService>()
-        .AddSingleton<HuiswerkDatabaseService>()
+        .AddSingleton<Status>()
+        .AddSingleton<CommandHandler>()
+        .AddSingleton<HuiswerkBot.Services.Startup>()
+        .AddSingleton<Logging>()
+        .AddSingleton<MessageHandler>()
+        .AddSingleton<Database>()
         .AddSingleton<Random>()
-        .AddSingleton(Configuration);
+        .AddSingleton(this.Configuration);
     }
 }
