@@ -1,0 +1,1 @@
+"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\PuTTY (64-bit)\PLINK.lnk" pi@pi4 -pw toor sudo /usr/bin/hwbot
