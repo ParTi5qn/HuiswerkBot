@@ -1,1 +1,1 @@
-MSBuild.exe "C:\Dev\HuisWerkBot\src\HuisWerkBot.csproj" -property:Configuration=Release
+MSBuild.exe "C:\Dev\HuiswerkBot\src\HuiswerkBot.csproj" -property:Configuration=Release
